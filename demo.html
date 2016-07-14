@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+          body,ul,li,input,p{
+          	 margin: 0;
+		    padding: 0;
+		    font-size: 16px;
+		    list-style: none;
+          }
+          body{
+          	width: 100%;
+          	height: 100%;
+          	background: url(images/3.png);
+          	background-size: cover;
+          }
+          .nav-out {
+		    height: 50px;
+		    background: rgba(47,47,47,0.98);
+		   }
+		   .logo {
+		    float: left;
+		    width: 100px;
+		    line-height: 50px;
+		    color: #DDD;
+		    font-size: 24px;
+		    cursor: pointer;
+		    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+		   }
+		   .nav {
+		    width: 600px;
+		    padding: 0 10px;
+		    margin: 0 auto;
+			}
+			.nav input{
+				float: right;
+			    width: 60%;
+			    height: 24px;
+			    margin-top: 12px;
+			    text-indent: 10px;
+			    border-radius: 5px;
+			    box-shadow: 0 1px 0 rgba(255,255,255,0.24), 0 1px 6px rgba(0,0,0,0.45) inset;
+			    border: none;
+			}
+			.list-box{
+				 width: 600px;
+			    padding: 0 10px;
+			    margin: 0 auto;
+			}
+			.now-top{
+			 font-weight: bolder;
+	         font-size: 1.5em;
+	         position: relative;
+			}
+			.now-top .tips{
+				position: absolute;
+			    top: 2px;
+			    right: 5px;
+			    display: inline-block;
+			    padding: 0 5px;
+			    height: 20px;
+			    border-radius: 20px;
+			    background: #E6E6FA;
+			    line-height: 22px;
+			    text-align: center;
+			    color: #666;
+			    font-size: 14px;
+			}
+	        .now-box{
+	        	margin: 26px 0;
+	        }
+	        .content{
+	        	width: 600px;
+	        	margin-top:20px;
+	        }
+	        .content li{
+			    height: 32px;
+			    line-height: 32px;
+			    background: #fff;
+			    position: relative;
+			    margin-bottom: 10px;
+			    padding: 0 45px;
+			    border-radius: 3px;
+			    border-left: 5px solid #629A9C;
+			    box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+	        }
+	        .content input{
+	        	position: absolute;
+			    top: 2px;
+			    left: 10px;
+			    width: 22px;
+			    height: 22px;
+			    cursor: pointer;
+			    float: left;
+
+	        }
+	        .content .del-btn{
+	        	position: absolute;
+			    top: 2px;
+			    right: 5px;
+			    display: inline-block;
+			    width: 14px;
+			    height: 12px;
+			    border-radius: 14px;
+			    border: 6px double #FFF;
+			    background: #CCC;
+			    line-height: 14px;
+			    text-align: center;
+			    color: #FFF;
+			    font-weight: bold;
+			    font-size: 14px;
+			    cursor: pointer;
+	        }
+	         .content .del-btn span{
+	         	display: block;
+	         	width: 10px;
+	         	height: 1px;
+	         	background: #fff;
+	         	margin-left: 2px;
+	         	margin-top: 6px;
+	         }
+	         .com-box li{
+	         	opacity: 0.6;
+	         }
+	</style>
+</head>
+<body>
+	<div class="nav-out">
+		<div class="nav">
+			<div class="logo">ToDolist</div>
+			<input type="text" placeholder="ToDo">
+		</div>
+	</div>
+	<div class="list-box">
+		<div class="now-box">
+			<div class="now-top">
+				<div class="title">正在进行</div>
+					<div class="tips">0</div>
+				<ul class="content">
+					<li>
+						<input type="checkbox">
+						<div class="content-list"></div>
+						<div class="del-btn"><span></span></div>
+					</li>
+					<li>
+						<input type="checkbox" checked>
+						<div class="content-list">fhjdshfdjs</div>
+						<div class="del-btn"><span></span></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="com-box">
+			<div class="now-top">
+				<div class="title">已经完成</div>
+					<div class="tips">0</div>
+				<ul class="content">
+					<li>
+						<input type="checkbox" checked>
+						<div class="content-list">fhjdshfdjs</div>
+						<div class="del-btn"><span></span></div>
+					</li>
+					<li>
+						<input type="checkbox" checked>
+						<div class="content-list">fhjdshfdjs</div>
+						<div class="del-btn"><span></span></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script>
+	var comList=document.querySelector(".com-box .content");
+	var comtips=document.querySelector(".com-box .tips");
+	var nowList=document.querySelector(".now-box .content");
+	var nowtips=document.querySelector(".now-box .tips");
+	console.log(comList)
+
+	var title=document.querySelector("[type=text]");
+	title.onkeydown=function(e){
+  	     var ev=e||window.event;
+  	     if(ev.keyCode=='13'){
+  	     	var val=this.value;
+  	     	 if(val.length==0){
+            alert('输入不能为空');
+              return;
+        		}    
+          var data=getData();
+	        data.push({
+                 title:val,
+	            status:false
+	           })
+	        this.value="";
+	        saveData(data);
+	         reload();
+	        
+                
+         }
+    }
+	function getData(){
+		  var data=JSON.parse(localStorage.getItem("todos"));
+		  return data||[];
+	}
+	function saveData(data){
+		localStorage.setItem('todos',JSON.stringify(data));
+	}
+
+          /*数据如何插入对应的结构
+          3.删除 删除dom 删除数据
+          所有dom重写*/
+          reload()
+     function reload(){
+          	var nowStr="";
+          	var conStr="";
+          	var nowNum=0;
+          	var conNum=0;
+          	var data=getData();
+          	for (var i = 0; i < data.length; i++) {
+          		if(data[i].status==false){
+          			nowStr+="<li><input type='checkbox' onclick=changeStatus("+i+",true)><div class='content-list'contenteditable onblur=changeContent("+i+",this.innerHTML)>"+data[i].title+"</div><div class='del-btn'  onclick=del("+i+")><span></span></div></li>";
+          			nowNum++;
+          		}else{
+          			conStr+="<li><input type='checkbox' checked onclick=changeStatus("+i+",false)><div class='content-list' contenteditable onblur=changeContent("+i+",this.innerHTML)>"+data[i].title+"</div><div class='del-btn'  onclick=del("+i+") ><span></span></div></li>";
+          			conNum++;
+          		}
+          	};
+          	comList.innerHTML=conStr;
+          	comtips.innerHTML=conNum;
+          	nowList.innerHTML=nowStr;
+          	nowtips.innerHTML=nowNum;
+     }
+    function del(i){
+          	var data=getData();
+          	data.splice(i,1);
+          	saveData(data);
+          		reload();
+    }
+    function changeStatus(i,sta){
+          	var data=getData();
+          	data[i].status=sta;
+          	saveData(data);
+          	reload();
+
+
+    }
+    function changeContent(i,text){
+          	var data=getData();
+          	data[i].title=text;
+          		saveData(data);
+
+    }
+
+	</script>
+</body>
+</html>
